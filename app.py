@@ -1,21 +1,8 @@
-from flask import Flask
-from routes.model import model_bp
-from db import db
+from app import create_app
 
-app = Flask(__name__)
 
-# SQLite config
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app = create_app()
 
-db.init_app(app)
-
-# Create tables
-with app.app_context():
-    db.create_all()
-
-# Register routes with /api prefix
-app.register_blueprint(model_bp, url_prefix="/api/model")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=app.config.get("DEBUG", True))
